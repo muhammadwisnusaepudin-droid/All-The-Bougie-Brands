@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All The Bougie Brands</title>
+<style>
+body {font-family: Arial; margin:0; background:#f4f4f4;}
+header {background:#111; color:#fff; padding:15px; text-align:center;}
+nav {display:flex; justify-content:center; gap:10px; background:#222;}
+nav button {padding:10px 20px; border:none; background:#444; color:#fff; cursor:pointer;}
+nav button:hover {background:#050b4f;}
+.page {display:none; padding:20px;}
+.active {display:block;}
+.products {display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:20px;}
+.product {background:#fff; padding:15px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); text-align:center;}
+.product img {width:100%; border-radius:10px;}
+button.buy {background:#000000; border:none; padding:10px; color:#fff; margin-top:10px; cursor:pointer;}
+.cart {background:#fff; padding:15px; border-radius:10px;}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🛒 All The Bougie Brands</h1>
+</header>
+
+<nav>
+<button onclick="showPage(1)">Page 1</button>
+<button onclick="showPage(2)">Page 2</button>
+<button onclick="showPage(3)">Cart</button>
+<button onclick="showPage(4)">Checkout</button>
+</nav>
+
+<!-- HALAMAN 1 -->
+<div id="page1" class="page active">
+<h2>product</h2>
+<div class="products">
+<div class="product">
+<img src="C:\Users\Hype AMD\Downloads\nike_air_max_dn_se__direct_sale_exclusive__hq3605-_0_1882.jpeg">
+<h3>Nike Air Max Dn SE</h3>
+<p>$255.00</p>
+<button class="buy" onclick="addToCart('Nike Air Max Dn SE',255.00)">Beli</button>
+</div>
+<div class="product">
+<img src="C:\Users\Hype AMD\Downloads\tas-gucci.png">
+<h3>Gucci Ophidia GG Supreme Top Handle Bag</h3>
+<p>$3.600.00</p>
+<button class="buy" onclick="addToCart('Gucci Ophidia GG Supreme Top Handle Bag',3600.00)">Beli</button>
+</div>
+</div>
+</div>
+
+<!-- HALAMAN 2 -->
+<div id="page2" class="page">
+<h2>Produk Lain</h2>
+<div class="products">
+<div class="product">
+<img src="C:\Users\Hype AMD\Downloads\rolex.png">
+<h3>Rolex Yacht Master II</h3>
+<p>$48.632.00</p>
+<button class="buy" onclick="addToCart('Rolex Yacht Master II',48632.00)">Beli</button>
+</div>
+<div class="product">
+<img src="C:\Users\Hype AMD\Downloads\mlb4.webp">
+<h3>New Era 59FIFTY Chicago White Sox</h3>
+<p>$303.95</p>
+<button class="buy" onclick="addToCart('New Era 59FIFTY Chicago White Sox',303.95)">Beli</button>
+</div>
+</div>
+</div>
+
+<!-- HALAMAN 3 -->
+<div id="page3" class="page">
+<h2>Keranjang</h2>
+<div class="cart" id="cart"></div>
+</div>
+
+<!-- HALAMAN 4 -->
+<div id="page4" class="page">
+<h2>Checkout</h2>
+<form onsubmit="checkout(event)">
+<input type="text" placeholder="Name" required><br><br>
+<input type="text" placeholder="Address" required><br><br>
+<button type="submit">Pay</button>
+</form>
+</div>
+
+<script>
+let cart = [];
+
+function showPage(n){
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+document.getElementById('page'+n).classList.add('active');
+if(n===3) renderCart();
+}
+
+function addToCart(name, price){
+cart.push({name, price});
+alert(name + ' added to cart!');
+}
+
+function renderCart(){
+let el = document.getElementById('cart');
+el.innerHTML = '';
+let total = 0;
+cart.forEach(item=>{
+total += item.price;
+el.innerHTML += `<p>${item.name} - $${item.price}</p>`;
+});
+el.innerHTML += `<hr><h3>Total: $${total}</h3>`;
+}
+
+function checkout(e){
+e.preventDefault();
+fetch('http://localhost:3000/checkout',{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body: JSON.stringify(cart)
+})
+.then(res=>res.json())
+.then(data=>alert('Order placed successfully!'));
+}
+</script>
+
+</body>
+</html>
+
+
